@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('personal_blog_admin/', admin.site.urls),
+    path('creative-blog-admin/', admin.site.urls),
 
     # user management
     path('accounts/', include('allauth.urls')),
