@@ -1,0 +1,48 @@
+{% extends "2_notes/topic_list.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav-brand %}
+  <div class="sidebar-heading border-bottom">Notes : {{ topic.topic }}</div>
+{% endblock nav-brand %}
+
+{% block sidebar %}
+  {% if topic.notes.exists %}
+    {% for note in topic.notes.all %}
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'note_detail' topic_pk=topic.pk note_pk=note.uuid %}">{{note.title}}</a>
+    {% endfor %}
+  {% endif %}
+{% endblock sidebar %}
+
+{% block item %}
+
+<div class="row">
+    <div class="col-md-9">
+            <div class="col-md-12 content">
+              <div class="d-flex justify-content-between content-header">
+                <h1>Delete {{note.title}}</h1>
+              </div>
+              <div class="content-body">
+                <form action="{% url 'delete_note' topic_pk=topic.pk note_pk=note.pk %}" method="POST">
+                    {% csrf_token %}
+                    <Strong> Are you sure you want to delete {{note.title}}</Strong>
+                    <p>To delete it, type the note title in the blank</p>
+                    {% if message %}
+                        {{message}}
+                    {% endif %}
+                    <input class="form-control" type="text" name="title">
+                    <br>
+                    <button class="btn btn-warning button"type="submit">Delete</button>
+                </form>
+                </div>
+            </div>
+        </div>
+  
+        <div class="col-md-3">      
+            <h1> graph </h1>
+        </div>
+ 
+</div>
+
+{% endblock item %}
+
+

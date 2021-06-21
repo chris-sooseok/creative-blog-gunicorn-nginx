@@ -1,0 +1,75 @@
+{% extends "_home.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+    <title>Creative Blog : Todos</title>
+{% endblock title %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/todos/todos_styles.css' %}"/>
+{% endblock static %}
+
+{% block nav-brand %}
+    <div class="sidebar-heading border-bottom">Todos</div>
+{% endblock nav-brand %}
+
+{% block sidebar %}
+{% if page_obj %}
+    {% for date in page_obj %}
+        {% if current_date == date.date %}
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'date_detail' date.pk %}">Today {{date.date}}</a>
+        {% else %}
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'date_detail' date.pk %}">{{date.date}}</a>
+        {% endif %}
+    {% endfor %}
+     
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item"> <p class="page-link" href="" > Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</p></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+        {% endif %}
+        </ul>
+      </nav>
+{% endif %}
+{% endblock sidebar %}
+
+{% block nav-item %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
+    <li class="nav-item active"><a class="nav-link" href="{% url 'date_list' %}">Todos</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'topic_list' %}">Notes</a></li>
+{% endblock nav-item %}
+
+{% block item %}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="col-md-12 content">
+            <div class="d-flex justify-content-between content-header">
+                <h1>Create Your Daily Schedule</h1>
+                <div class="content-header-action">
+                    <a href="{% url 'create_date' %}" class="btn btn-success" role="button">Create new date</a>
+                </div>
+            </div>
+            <div class="content-body">
+                <div class="list-group"> 
+                    <p>No items to be displayed </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">        
+        <h1> graph </h1>
+    </div>
+</div>
+
+{% endblock item %}
+
+

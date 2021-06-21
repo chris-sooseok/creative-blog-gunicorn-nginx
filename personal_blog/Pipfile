@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "~=3.2.3"
+psycopg2 = "==2.8.5"
+django-crispy-forms = "==1.9.2"
+django-ckeditor = "==6.1.0"
+pillow = "==8.1.0"
+django-debug-toolbar = "==2.2"
+requests = "*"
+django-allauth = "==0.42.0"
+environs = {version = "==8.0.0", extras = ["django"]}
+bs4 = "*"
+lxml = "*"
+whitenoise = "==5.2.0"
+gunicorn = "==20.1.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

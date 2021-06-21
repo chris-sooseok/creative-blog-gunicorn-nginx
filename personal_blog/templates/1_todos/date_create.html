@@ -1,0 +1,28 @@
+{% extends "1_todos/date_list.html" %}
+
+{% block item %}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="col-md-12 content">
+            <div class="d-flex justify-content-between content-header">
+              <h1>Create Your Daily Schedule</h1>
+            </div>
+            <div class="content-body">
+              <form method="POST">
+                  {% csrf_token %}
+                  {{form.as_p}}
+                  <button class="btn btn-success button">Create new Date</button>
+              </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">        
+        <h1> graph </h1>
+    </div>
+</div>
+
+{% endblock item %}
+
+
+

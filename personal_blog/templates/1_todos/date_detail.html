@@ -1,0 +1,48 @@
+{% extends "1_todos/date_list.html" %}
+
+{% block item %}
+
+<div class="row">
+  <div class="col-md-9">
+    <div class="col-md-12 content">
+      {% if date %}
+              <div class="d-flex justify-content-between content-header">
+                <h1>{{ date.date }}</h1>
+                <div class="nav flex-column content-header-action">
+                  <a href="{% url 'create_todo' date.pk %}" class="btn btn-success" role="button">Create new task</a>
+                  <a href="{% url 'delete_date' date.pk %}" class="btn btn-success" role="button">Delete the date </a>
+                </div>
+              </div>
+          <div class="content-body">
+            <div class="list-group">     
+              {% for todo in date.todos.all %}
+                <div class="list-group-item list-group-item-action flex-column align-items-start active">
+                  <div class="d-flex w-100 justify-content-between">
+                    <div class="nav flex-column content-body-title">
+                      <h2 class="mb-1"> {{ todo.title }}</h2>
+                      <p class="mb-1 time"> {{ todo.start_time }} - {{ todo.end_time }}</p>
+                    </div>
+                    <div class="nav flex-column content-body-action">
+                      <a href="{% url 'delete_todo' date_pk=date.pk todo_pk=todo.id %}" class="btn btn-success" role="button">Delete </a>
+                      <a href="{% url 'update_todo' date_pk=date.pk todo_pk=todo.id %}" class="btn btn-success" role="button">Update </a>
+                    </div>
+                  </div>
+                  <div class="task">
+                    <p>{{ todo.task|linebreaks }}</p>  
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-3">        
+        <h1> graph </h1>
+    </div>
+</div>
+
+{% endblock item %}
+
+

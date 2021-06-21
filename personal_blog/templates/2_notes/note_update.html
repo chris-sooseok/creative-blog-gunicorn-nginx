@@ -1,0 +1,50 @@
+{% extends "2_notes/topic_list.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/notes/notes_styles.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/notes/note_margin.css' %}"/>
+{% endblock static %}
+
+{% block nav-brand %}% if topic %}
+  <div class="sidebar-heading border-bottom">Notes : {{ topic.topic }}</div>
+{% endblock nav-brand %}
+
+{% block sidebar %}
+  {% if topic.notes.exists %}
+    {% for note in topic.notes.all %}
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'note_detail' topic_pk=topic.pk note_pk=note.uuid %}">{{note.title}}</a>
+    {% endfor %}
+  {% endif %}
+{% endblock sidebar %}
+
+{% block item %}
+
+<div class="row">
+    <div class="col-md-9">
+            <div class="col-md-12 content">
+              <div class="d-flex justify-content-between content-header">
+                <h1>Update {{note.title}}</h1>
+              </div>
+              <div class="content-body">
+                <form action="{% url 'update_note' topic_pk=topic.pk note_pk=note.pk  %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form|crispy }}
+                    <button class="btn btn-success button"type="submit">Submit</button>
+                </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            
+            <h1> graph </h1>
+            
+        </div>
+ 
+</div>
+
+{% endblock item %}
+
+

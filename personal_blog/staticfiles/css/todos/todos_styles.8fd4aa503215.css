@@ -1,0 +1,86 @@
+body{
+    background:#eee;
+    font-family: Georgia;
+}
+
+.row {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.content {
+    border-radius: 2px;
+    background-color: white;
+    padding-top: 12px;
+    padding-bottom: 50px;
+}
+
+.content .content-header{
+    padding-bottom: 10px;
+    border-bottom: 1px solid orange;
+}
+
+.content .content-header .content-header-action{
+    align-content: flex-end;
+}
+
+.content .content-header .content-header-action a {
+
+    text-decoration: none;
+    margin-top: 3px;
+}
+
+.content .content-header .content-header-action a:hover {
+    color: white;
+}
+
+.content-body {
+    padding-top: 20px;
+}
+
+.content-body .list-group .list-group-item{
+    background-color:white;
+    border-color: orange;
+    color: black;
+}
+
+.list-group .list-group-item .content-body-title {
+    word-break: break-all;
+}
+
+.list-group .list-group-item .content-body-action {
+    text-align: right;
+}
+
+.list-group .list-group-item .content-body-action a {
+    text-decoration: none;
+    margin-top: 3px;
+}
+
+.list-group .list-group-item .content-body-action a:hover{
+    color: white;
+}
+
+.list-group .list-group-item .time {
+    text-decoration: underline;
+    text-transform: uppercase;
+    text-underline-offset: 3px;
+}
+
+.task {
+    font-size: large;
+    line-height: 30px;
+}
+
+.button {
+    float: right;
+}
+
+@media (max-width: 768px) {
+    .row {
+        margin-right: 5px;
+    }
+    .task {
+        font-size: medium;
+    }
+}

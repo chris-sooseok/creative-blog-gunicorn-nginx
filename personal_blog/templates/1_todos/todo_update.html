@@ -1,0 +1,32 @@
+{% extends "1_todos/date_list.html" %}
+{% load crispy_forms_tags %}
+{% block item %}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="col-md-12 content">
+            <div class="d-flex justify-content-between content-header">
+              <h1>Update {{todo.title}}</h1>
+            </div>
+      
+            <div class="content-body">
+            
+                <form action="{% url 'update_todo' date_pk=date.pk todo_pk=todo.id%}"method="POST">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    <input type="time" name="start_time" placeholder="Start Time" value="{{ time.start_time }}" required>
+                    <input type="time" name="end_time" placeholder="End Time" value="{{ time.end_time }}" required>
+                    {{ form|crispy }}
+                    <button class="btn btn-success button">Update This Todo</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-3">        
+        <h1> graph </h1>
+    </div>
+</div>
+
+{% endblock item %}

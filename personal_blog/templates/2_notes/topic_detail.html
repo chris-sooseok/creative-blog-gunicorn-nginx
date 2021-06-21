@@ -1,0 +1,43 @@
+{% extends "2_notes/topic_list.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav-brand %}
+    <div class="sidebar-heading border-bottom">Notes : {{ topic.topic }}</div>
+{% endblock nav-brand %}
+
+{% block sidebar %}
+    {% if topic.notes.exists %}
+      {% for note in topic.notes.all %}
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'note_detail' topic_pk=topic.pk note_pk=note.uuid %}">{{note.title}}</a>
+      {% endfor %}
+    {% else %}
+{% endif %}
+{% endblock sidebar %}
+
+{% block item %}
+<div class="row">
+  <div class="col-md-9">
+    
+      <div class="col-md-12 content">   
+          {% if topic %}   
+          <div class="d-flex justify-content-between content-header">
+              <h1>{{topic.topic}}</h1>
+              <div class="content-header-action">
+              <a href="{% url 'create_note' topic.pk %}" class="btn btn-success">Create new note</a>
+              </div>
+          </div>
+          {% endif %}
+
+          <div class="content-body">
+            No Content To be Displayed.
+          </div>
+      </div>
+
+  </div>
+  <div class="col-md-3">        
+    <h1> graph </h1>
+  </div>
+</div>
+{% endblock item %}
+
+
