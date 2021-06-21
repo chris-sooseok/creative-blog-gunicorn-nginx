@@ -11,25 +11,25 @@ def MainListFunction(request):
   
     cities = City.objects.all()
 
-    weather_list = []
-
+    print(cities)
     message = ""
-    if not cities:
+    if cities:
         for city in cities:
             r = requests.get(url.format(city.name, "metric")).json()
+            print(r)
         # ckeditor content
             if "message" in r and (r["message"] == "city not found" or r["message"] == "Nothing to geocode"):
-                City.objects.get(id=city.id).delete()
+                City.objects.get(id=city.id).delete().save()
                 message = "City Name is invalid"
             else:
-                weather = {
-                    'city': city.name,
-                    'temperature': r['main']['temp'],
-                    'description': r['weather'][0]['description'],
-                    'icon': r['weather'][0]['icon'],
-                }
-                weather_list.append(weather)
-    context = {"weather_list": zip(weather_list,cities), "message": message}
+               
+                city = City.objects.get(id=city.id)
+                city.temperature = r['main']['temp']
+                city.description = r['weather'][0]['description']
+                city.icon =  r['weather'][0]['icon']
+                city.save()
+    cities = City.objects.all()
+    context = {"cities": cities, "message": message}
     
     return render(request, '_home.html', context)
 

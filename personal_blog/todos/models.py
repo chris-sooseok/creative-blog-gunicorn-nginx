@@ -13,9 +13,7 @@ class Date(models.Model):
 
     class Meta:
         ordering = ['-date']
-        indexes = [
-            models.Index(fields=['id'], name='id_index'),
-        ]
+       
         
 
 class Todo(models.Model):
