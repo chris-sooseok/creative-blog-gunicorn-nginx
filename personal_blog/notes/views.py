@@ -56,39 +56,39 @@ def NoteDetailFunction(request,topic_pk,note_pk):
     return render(request, '2_notes/note_detail.html', {'topic':topic, 'note':note})
 
 def NoteCreateFunction(request, pk):
-    if request.method == "POST":
-        if request.user.is_authenticated:
+    if request.user.is_authenticated:
+        if request.method == "POST":   
             form = NoteForm(request.POST)
             if form.is_valid():
                 note_item = form.save(commit=False)
                 note_item.topic_id = pk
                 note_item.save()
                 return redirect('topic_detail', pk=pk)
+        
         else:
-            return redirect('account_login')
+            form = NoteForm()
+            topic = Topic.objects.get(id=pk)
+            return render(request, '2_notes/note_create.html', {'topic':topic, 'form':form})
     else:
-        form = NoteForm()
-        topic = Topic.objects.get(id=pk)
-    return render(request, '2_notes/note_create.html', {'topic':topic, 'form':form})
+        return redirect('account_login')
 
 def NoteUpdateFunction(request, topic_pk, note_pk):
-    topic = Topic.objects.get(id=topic_pk)
-    if request.method == "POST":
-        if request.user.is_authenticated:
+    if request.user.is_authenticated:
+        topic = Topic.objects.get(id=topic_pk)
+        if request.method == "POST":
             note_item = Note.objects.get(uuid=note_pk)
             note_item.title = request.POST['title']
             note_item.summary = request.POST['summary']
             note_item.content = request.POST['content']
             note_item.save()
-            return redirect("note_detail", topic_pk=topic_pk, note_pk=note_pk)
+            return redirect("note_detail", topic_pk=topic_pk, note_pk=note_pk)    
         else:
-            return redirect('account_login')
+            note = Note.objects.get(uuid=note_pk)
+            initial_data = {"title":note.title, "summary": note.summary, "content":note.content}
+            form = NoteForm(request.POST or None,initial=initial_data)
+        return render(request, "2_notes/note_update.html", {"topic":topic,"note":note, "form":form})
     else:
-        note = Note.objects.get(uuid=note_pk)
-        initial_data = {"title":note.title, "summary": note.summary, "content":note.content}
-        print(note.content)
-        form = NoteForm(request.POST or None,initial=initial_data)
-    return render(request, "2_notes/note_update.html", {"topic":topic,"note":note, "form":form})
+        return redirect('account_login')
 
 def NoteDeleteFunction(request, topic_pk, note_pk):
     topic = Topic.objects.get(id=topic_pk)
@@ -108,6 +108,7 @@ def NoteDeleteFunction(request, topic_pk, note_pk):
 def FileCleanFunction(request):
     if request.user.is_superuser:
         all_imgs = []
+        num_del = 0
         note_list = Note.objects.all()
         for note in note_list:
             soup = BeautifulSoup(note.content, "lxml")
@@ -126,6 +127,8 @@ def FileCleanFunction(request):
         for filepath in all_filepath:
             if not filepath in all_imgs:
                 os.remove(filepath)
+                num_del += 1
+        print("The number of imgs deleted are ", num_del)
         return redirect('topic_list')
     else:
         return redirect('account_login')
