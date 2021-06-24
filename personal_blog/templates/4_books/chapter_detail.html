@@ -1,0 +1,74 @@
+{% extends "4_books/book_list.html" %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+
+{% block title %}
+    <title>Books : Chris Kim's Blog</title>
+{% endblock title %}
+
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/books/books_styles.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/books/chapter_margin.css' %}"/>
+
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.0.1/highlight.min.js"></script>
+    <script src="/path/to/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+{% endblock static %}
+
+{% block nav-brand %}
+    <div class="sidebar-heading border-bottom">Books : {{ book.title }}</div>
+{% endblock nav-brand %}
+
+{% block sidebar %}
+
+  {% if book.chapters.exists %}
+    {% for chapter in book.chapters.all %}
+      <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'chapter_detail' book_pk=book.pk chapter_pk=chapter.id %}">{{chapter.title}}</a>
+    {% endfor %}
+  {% endif %}
+
+{% endblock sidebar %}
+
+{% block nav-item %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'date_list' %}">Todos</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'topic_list' %}">Notes</a></li>
+    <li class="nav-item active"><a class="nav-link" href="{% url 'book_list' %}">Books</a></li>
+{% endblock nav-item %}
+
+{% block item %}
+
+<div class="row">
+    <div class="col-md-9">
+            <div class="col-md-12 content">
+                {% if chapter %}
+                <div class="d-flex justify-content-between content-header">
+                    <div class="content-header-nav flex-column">
+                    <h1>{{ chapter.title }}</h1>
+                    </div>
+                    <div class="nav flex-column content-header-action">
+                        <a href="{% url 'update_chapter' book_pk=book.pk chapter_pk=chapter.id %}" class="btn btn-success"> Update</a>
+                        <a href="{% url 'delete_chapter' book_pk=book.pk chapter_pk=chapter.id %}" class="btn btn-success"> Delete </a>
+                        <a href="{% url 'create_chapter' book.pk %}" class="btn btn-success"> Create </a>
+                    </div>
+                </div>
+                <div class="col-md-12 content-body">
+                    {{chapter.content|safe }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-3">
+            
+            <h1> graph </h1>
+            
+        </div>
+ 
+</div>
+
+{% endblock item %}
+
+

@@ -29,7 +29,8 @@ urlpatterns = [
     path('todos/', include('todos.urls')),
     path('notes/', include('notes.urls')),
     path('people/', include('people.urls')),
-
+    path('books/', include('books.urls')),
+    
     # third party
     path('ckeditor/', include('ckeditor_uploader.urls')),
     

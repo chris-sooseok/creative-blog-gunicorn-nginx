@@ -3,15 +3,15 @@
 {% load static %}
 
 {% block title %}
-  <title>Creative Blog : Notes</title>
+  <title>Creative Blog : Books</title>
 {% endblock title %}
 
 {% block static %}
-  <link rel="stylesheet" href="{% static 'css/notes/notes_styles.css' %}"/>
+  <link rel="stylesheet" href="{% static 'css/books/books_styles.css' %}"/>
 {% endblock static %}
 
 {% block nav-brand %}
-  <div class="sidebar-heading border-bottom">Notes</div>
+  <div class="sidebar-heading border-bottom">Books</div>
 {% endblock nav-brand %}
 
 {% block sidebar %}
@@ -21,8 +21,8 @@
 {% block nav-item %}
     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
     <li class="nav-item"><a class="nav-link" href="{% url 'date_list' %}">Todos</a></li>
-    <li class="nav-item active"><a class="nav-link" href="{% url 'topic_list' %}">Notes</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'book_list' %}">Books</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'topic_list' %}">Notes</a></li>
+    <li class="nav-item active"><a class="nav-link" href="{% url 'book_list' %}">Books</a></li>
 {% endblock nav-item %}
 
 {% block item %}
@@ -31,24 +31,21 @@
     <div class="col-md-9">
         <div class="col-md-12 content">
             <div class="d-flex justify-content-between content-header">
-                <h1>Topic List</h1>
+                <h1>Book List</h1>
                 <div class="nav flex-column content-header-action">
-                  <a href="{% url 'create_topic' %}" class="btn btn-success">Create new topic</a>
-                  {% if user.is_superuser %}
-                    <a href="{% url 'clean_file' %}" class="btn btn-success">Clean files</a>
-                  {% endif %}
+                  <a href="{% url 'create_book' %}" class="btn btn-success">Create new book</a>
                 </div>
             </div>
             <div class="content-body">
-            {% if topic_list %}
+            {% if book_list %}
                 <div class="list-group">     
-                    {% for topic in topic_list %}
+                    {% for book in book_list %}
                         <div class="list-group-item list-group-item-action flex-column align-items-start active">
                             <div class="d-flex w-100 justify-content-between">
-                                <h2 class="mb-1 content-body-title "><a href="{% url 'topic_detail' topic.pk %}">{{topic.topic}}</a></h2>
+                                <h2 class="mb-1 content-body-title "><a href="{% url 'book_detail' book.pk %}">{{book.title}}</a></h2>
                                 <div class="nav flex-column content-body-action">
-                                    <a href="{% url 'delete_topic' topic.pk %}" class="btn btn-success">Delete </a>
-                                    <a href="{% url 'update_topic' topic.pk %}"  class="btn btn-success">Update </a>
+                                    <a href="{% url 'delete_book' book.pk %}" class="btn btn-success">Delete </a>
+                                    <a href="{% url 'update_book' book.pk %}"  class="btn btn-success">Update </a>
                                 </div>
                             </div> 
                         </div>
