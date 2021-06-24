@@ -19,7 +19,7 @@ class Chapter(models.Model):
     chapter = models.CharField(max_length=30, blank=True)
     title = models.CharField(max_length=200, blank=True)
     date = models.DateField(auto_now=True)
-    content = RichTextUploadingField(blank=True, null=True)
-
+    content = RichTextUploadingField(blank=True, config_name='book')
+    # to commit
     def __str__(self):
         return str(self.title)
