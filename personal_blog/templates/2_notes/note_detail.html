@@ -32,11 +32,6 @@
 
 {% endblock sidebar %}
 
-{% block nav-item %}
-    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'date_list' %}">Todos</a></li>
-    <li class="nav-item active"><a class="nav-link" href="{% url 'topic_list' %}">Notes</a></li>
-{% endblock nav-item %}
 
 {% block item %}
 
@@ -46,8 +41,8 @@
                 {% if note %}
                 <div class="d-flex justify-content-between content-header">
                     <div class="content-header-nav flex-column">
-                    <h1>{{ note.title }}</h1>
-                    <h4>{{ note.summary }}</h4>
+                    <h3>{{ note.title }}</h3>
+                    <h5>{{ note.summary }}</h5>
                     </div>
                     <div class="nav flex-column content-header-action">
                         <a href="{% url 'update_note' topic_pk=topic.pk note_pk=note.uuid %}" class="btn btn-success"> Update</a>
