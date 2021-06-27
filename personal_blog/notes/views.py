@@ -108,7 +108,8 @@ def NoteDeleteFunction(request, topic_pk, note_pk):
 def FileCleanFunction(request):
     if request.user.is_superuser:
         all_imgs = []
-        num_del = 0
+        file_del = 0
+        dir_del = 0
         note_list = Note.objects.all()
         for note in note_list:
             soup = BeautifulSoup(note.content, "lxml")
@@ -116,19 +117,23 @@ def FileCleanFunction(request):
             for img in all_img:
                 all_imgs.append(img.get("src")[1::])
 
-        all_filepath = []
         path = "media/uploads"
         for subdir, dirs, files in os.walk(path):
+            try:
+                os.rmdir(subdir)
+                dir_del += 0
+            except:
+                pass
             for filename in files:
+                print(filename)
                 filepath = subdir + os.sep + filename
-                if filepath.endswith(".jpg") or filepath.endswith(".png") or filepath.endswith(".jfif"):
-                    all_filepath.append(filepath)
-        
-        for filepath in all_filepath:
-            if not filepath in all_imgs:
-                os.remove(filepath)
-                num_del += 1
-        print("The number of imgs deleted are ", num_del)
+                print(filepath)
+                if not filepath  in all_imgs:
+                    os.remove(filepath)
+                    file_del += 1
+
+        print("number of files deleted are ", file_del)
+        print("number of dir deleted are ", dir_del)
         return redirect('topic_list')
     else:
         return redirect('account_login')
