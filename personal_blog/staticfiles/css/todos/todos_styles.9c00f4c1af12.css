@@ -77,9 +77,6 @@ body{
 }
 
 @media (max-width: 768px) {
-    .row {
-        margin-right: 5px;
-    }
     .task {
         font-size: medium;
     }
