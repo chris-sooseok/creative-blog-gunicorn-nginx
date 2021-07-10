@@ -17,7 +17,7 @@ def MainListFunction(request):
             r = requests.get(url.format(city.name, "metric")).json()
         # ckeditor content
             if "message" in r and (r["message"] == "city not found" or r["message"] == "Nothing to geocode"):
-                City.objects.get(id=city.id).delete().save()
+                City.objects.get(id=city.id).delete()
                 message = "City Name is invalid"
             else:
                 city = City.objects.get(id=city.id)
