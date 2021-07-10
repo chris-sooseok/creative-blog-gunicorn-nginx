@@ -125,9 +125,7 @@ def FileCleanFunction(request):
             except:
                 pass
             for filename in files:
-                print(filename)
                 filepath = subdir + os.sep + filename
-                print(filepath)
                 if not filepath  in all_imgs:
                     os.remove(filepath)
                     file_del += 1
