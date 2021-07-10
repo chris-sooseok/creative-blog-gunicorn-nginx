@@ -123,7 +123,7 @@ def FileCleanFunction(request):
                 os.rmdir(subdir)
                 dir_del += 0
             except:
-                pass
+                continue
             for filename in files:
                 filepath = subdir + os.sep + filename
                 if not filepath  in all_imgs:
