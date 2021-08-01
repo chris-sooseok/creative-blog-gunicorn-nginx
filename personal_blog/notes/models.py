@@ -5,7 +5,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 class Topic(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    topic = models.CharField(max_length=30)
+    topic = models.CharField(max_length=60)
 
     def __str__(self):
         return str(self.topic)
