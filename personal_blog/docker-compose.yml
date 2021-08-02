@@ -19,14 +19,17 @@ services:
         depends_on:
             - db
         environment:
-            - DJANGO_SECRET_KEY=django-insecure-k!xaco+=1j5tk7t&x=xfe!5dxs$wscqb=8db5mgsmt@1h(66z=
-            - DJANGO_DEBUG=True
-            - DJANGO_SECURE_SSL_REDIRECT=False
-            - DJANGO_SECURE_HSTS_SECONDS=0
-            - DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False
-            - DJANGO_SECURE_HSTS_PRELOAD=False
-            - DJANGO_SESSION_COOKIE_SECURE=False
-            - DJANGO_CSRF_COOKIE_SECURE=False
+            - "DJANGO_SECRET_KEY=django-insecure-k!xaco+=1j5tk7t&x=xfe!5dxs$wscqb=8db5mgsmt@1h(66z="
+            - "DJANGO_DEBUG=True"
+            - "DJANGO_SECURE_SSL_REDIRECT=False"
+            - "DJANGO_SECURE_HSTS_SECONDS=0"
+            - "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False"
+            - "DJANGO_SECURE_HSTS_PRELOAD=False"
+            - "DJANGO_SESSION_COOKIE_SECURE=False"
+            - "DJANGO_CSRF_COOKIE_SECURE=False"
+            - "AWS_ACCESS_KEY_ID=AKIAR2UYSJ3QAD3ODM6N"
+            - "AWS_SECRET_ACCESS_KEY=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"
+            - "AWS_STORAGE_BUCKET_NAME=creativeblogbucket"
     db:
         image: postgres:11
         volumes: 
