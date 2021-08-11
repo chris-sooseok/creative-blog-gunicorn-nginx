@@ -1,4 +1,4 @@
-from .models import City
+from .models import City, Setting
 from django import forms
 
 
@@ -9,3 +9,9 @@ class WeatherCreateForm(forms.ModelForm):
         model = City
         fields = ('name',)
         exclude = ('id',)
+
+class SettingUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Setting
+        fields = ('todos', 'notes',)
+        exclude = ('user',)

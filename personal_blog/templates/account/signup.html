@@ -101,13 +101,14 @@ body {
 </head>
 <body>
 <div class="signup-form">	
-    <form action="#" method="post">
+    <form action="{% url 'account_signup' %}" method="post">
+		{% csrf_token %}
 		<h2>Create Account</h2>
         <div class="form-group"> 
 			    {{form|crispy}}
         </div> 
 		<div class="form-group">
-            <button type="submit" class="btn btn-primary btn-block btn-lg">Sorry, sign up is currently unavailable</button>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
         </div>
 		<p class="small text-center">By clicking the Sign Up button, you agree to our <br><a href="#">Terms &amp; Conditions</a>, and <a href="#">Privacy Policy</a>.</p>
     </form>

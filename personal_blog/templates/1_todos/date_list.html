@@ -15,6 +15,7 @@
 {% endblock nav-brand %}
 
 {% block sidebar %}
+<div class="list-group">
 {% if page_obj %}
     {% for date in page_obj %}
         {% if current_date == date.date %}
@@ -38,6 +39,7 @@
         </ul>
       </nav>
 {% endif %}
+</div>
 {% endblock sidebar %}
 
 {% block nav-item %}

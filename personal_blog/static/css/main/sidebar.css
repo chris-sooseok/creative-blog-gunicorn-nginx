@@ -4087,6 +4087,23 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   margin-left: 0;
 }
 
+.profile {
+  padding-top: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  width: 18rem;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.logos a {
+  padding: 20px;
+  font-size: 30px;
+  width: 50px;
+  text-align: center;
+  text-decoration: none;
+}
+
 @media (min-width: 768px) {
   #sidebar-wrapper {
     margin-left: 0;

@@ -1,0 +1,15 @@
+{% extends "_home.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Creative Blog: Settings</title>
+{% endblock title %}
+
+
+{% block item %}
+    <form method="POST" action=".">
+        {% csrf_token %}
+            {{form}}
+        <button type="submit">Update</button>
+    </form>
+{% endblock item %}

@@ -129,7 +129,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'todos.custom_context_processor.current_date_renderer',
+                'main.custom_context_processor.apps',
             ],
+            'libraries':{
+                'custom_filter': 'main.custom_filter',
+            }
         },
     },
 ]
@@ -165,9 +169,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Seoul'
@@ -177,10 +178,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] # new
@@ -198,7 +195,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# S3 settings
+# ---- S3 SETTING -----
 
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default=None)
@@ -215,9 +212,13 @@ DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
 MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 MEDIA_ROOT = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
 
+# ---- S3 SETTING END -----
+
 #MEDIA_URL = '/media/'
 #MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 
+
+# ---- CKEDITOR SETTING -----
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS = {
@@ -247,6 +248,8 @@ CKEDITOR_CONFIGS = {
         ],
     }   
 }
+
+# ---- CKEDITOR SETTING END -----
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 604800

@@ -6,11 +6,13 @@
 {% endblock nav-brand %}
 
 {% block sidebar %}
+<div class="list-group">
   {% if topic.notes.exists %}
     {% for note in topic.notes.all %}
       <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'note_detail' topic_pk=topic.pk note_pk=note.uuid %}">{{note.title}}</a>
     {% endfor %}
   {% endif %}
+</div>
 {% endblock sidebar %}
 
 {% block item %}
