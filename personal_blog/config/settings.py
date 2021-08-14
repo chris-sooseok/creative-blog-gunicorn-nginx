@@ -65,13 +65,6 @@ INSTALLED_APPS = [
 
 ]
 
-AUTH_USER_MODEL ='accounts.CustomUser'
-
-LOGIN_REDIRECT_URL = 'home'
-#LOGOUT_REDIRECT_URL = 'home'
-ACCOUNT_LOGOUT_REDIRECT = 'home'
-
-ACCOUNT_SESSION_REMEMBER = True
 
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (
@@ -81,17 +74,29 @@ AUTHENTICATION_BACKENDS = (
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# ---- ALLAUTH SETTING ----
+AUTH_USER_MODEL ='accounts.CustomUser'
+
+LOGIN_REDIRECT_URL = 'home'
+#LOGOUT_REDIRECT_URL = 'home'
+ACCOUNT_LOGOUT_REDIRECT = 'home'
+
+ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+# ---- ALLAUTH SETTING END ----
 
+
+# django-debug-toolbar
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
 
+
+# ---- DEPLOYMENT CHECKLIST ----
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
@@ -99,6 +104,9 @@ SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 SESSION_COOKIE_SECURE = env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
 CSRF_COOKIE_SECURE = env.bool("DJANGO_CSRF_COOKIE_SECURE", default=True)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# ---- DEPLOYMENT CHECKLIST END -----
+
+
 
 
 MIDDLEWARE = [
@@ -179,43 +187,55 @@ USE_L10N = True
 
 USE_TZ = True
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] # new
-STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
-STATICFILES_FINDERS = [ # new
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # new
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# ---- S3 SETTING -----
 
+# ---- S3 SETTING -----
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default=None)
 AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET', default=None)
-AWS_DEFAULT_ACL = None
+AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}s.s3.ap-northeast-2.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
-# S3 media settings
-AWS_MEDIA_LOCATION = 'media'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_MEDIA_LOCATION}/'
-DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-MEDIA_ROOT = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+AWS_LOCATION = 'static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+STATICFILES_STORAGE = 'config.storage_backends.StaticStorage'
 
-# ---- S3 SETTING END -----
+#STATIC_URL = '/static/'
+STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] # new
+#STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
+#STATICFILES_FINDERS = [ # new
+#    "django.contrib.staticfiles.finders.FileSystemFinder",
+#   "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+#]
+#
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # new
 
 #MEDIA_URL = '/media/'
 #MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
+
+AWS_MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
+#PUBLIC_MEDIA_LOCATION = 'media'
+#MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+#DEFAULT_FILE_STORAGE = 'config.storage_backends.PublicMediaStorage'
+#MEDIA_ROOT = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+#
+#PRIVATE_MEDIA_LOCATION = 'private'
+#PRIVATE_FILE_STORAGE = 'config.storage_backends.PrivateMediaStorage'
+
+# ---- S3 SETTING END -----
+
 
 
 # ---- CKEDITOR SETTING -----
@@ -250,6 +270,8 @@ CKEDITOR_CONFIGS = {
 }
 
 # ---- CKEDITOR SETTING END -----
+
+
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 604800

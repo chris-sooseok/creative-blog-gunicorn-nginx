@@ -19,6 +19,7 @@ class Note(models.Model):
     title = models.CharField(max_length=100)
     summary = models.CharField(max_length=200, blank=True)
     date = models.DateField(auto_now=True)
+    # content media file path is set in setting to uploads
     content = RichTextUploadingField(blank=True, null=True)
 
     def __str__(self):

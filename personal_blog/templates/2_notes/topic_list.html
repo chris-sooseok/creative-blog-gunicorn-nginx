@@ -35,9 +35,6 @@
                 <h1>Topic List</h1>
                 <div class="nav flex-column content-header-action">
                   <a href="{% url 'create_topic' %}" class="btn btn-success">Create new topic</a>
-                  {% if user.is_superuser %}
-                    <a href="{% url 'clean_file' %}" class="btn btn-success">Clean files</a>
-                  {% endif %}
                 </div>
             </div>
             <div class="content-body">

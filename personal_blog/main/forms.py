@@ -10,8 +10,11 @@ class WeatherCreateForm(forms.ModelForm):
         fields = ('name',)
         exclude = ('id',)
 
+
+# This form has multiple fields for user setting update
 class SettingUpdateForm(forms.ModelForm):
     class Meta:
         model = Setting
-        fields = ('todos', 'notes',)
+        fields = ('profile_pic','todos', 'notes',)
         exclude = ('user',)
+

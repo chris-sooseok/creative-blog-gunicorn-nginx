@@ -105,33 +105,34 @@ def NoteDeleteFunction(request, topic_pk, note_pk):
     else:
         return render(request, "2_notes/note_delete.html", {"topic":topic, "note":note})
 
-def FileCleanFunction(request):
-    if request.user.is_superuser:
-        all_imgs = []
-        file_del = 0
-        dir_del = 0
-        note_list = Note.objects.all()
-        for note in note_list:
-            soup = BeautifulSoup(note.content, "lxml")
-            all_img = soup.findAll('img')
-            for img in all_img:
-                all_imgs.append(img.get("src")[1::])
-
-        path = "media/uploads"
-        for subdir, dirs, files in os.walk(path):
-            try:
-                os.rmdir(subdir)
-                dir_del += 0
-            except:
-                continue
-            for filename in files:
-                filepath = subdir + os.sep + filename
-                if not filepath  in all_imgs:
-                    os.remove(filepath)
-                    file_del += 1
-
-        print("number of files deleted are ", file_del)
-        print("number of dir deleted are ", dir_del)
-        return redirect('topic_list')
-    else:
-        return redirect('account_login')
+#def FileCleanFunction(request):
+#    if request.user.is_superuser:
+#        all_imgs = []
+#        file_del = 0
+#        dir_del = 0
+#        note_list = Note.objects.all()
+#        for note in note_list:
+#            soup = BeautifulSoup(note.content, "lxml")
+#            all_img = soup.findAll('img')
+#            for img in all_img:
+#                all_imgs.append(img.get("src")[1::])
+#
+#        path = "media/uploads"
+#        for subdir, dirs, files in os.walk(path):
+#            try:
+#                os.rmdir(subdir)
+#                dir_del += 0
+#            except:
+#                continue
+#            for filename in files:
+#                filepath = subdir + os.sep + filename
+#                if not filepath  in all_imgs:
+#                    os.remove(filepath)
+#                    file_del += 1
+#
+#        print("number of files deleted are ", file_del)
+#        print("number of dir deleted are ", dir_del)
+#        return redirect('topic_list')
+#    else:
+#        return redirect('account_login')
+#

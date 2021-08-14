@@ -5,8 +5,11 @@ from .models import City, Setting
 from django.contrib.auth.decorators import login_required
 from .forms import SettingUpdateForm
 import json
+from config import settings
 # Create your views here.
 
+
+# home page
 def MainListFunction(request):
     # list of recent posts
     # list of weather
@@ -28,11 +31,15 @@ def MainListFunction(request):
                 city.description = r['weather'][0]['description']
                 city.icon =  r['weather'][0]['icon']
                 city.save()
+
     cities = City.objects.all()
-    context = {"cities": cities, "message": message}
+    
+    context = {}
+    context.update({"cities": cities, "message": message})
     
     return render(request, '_home.html', context)
 
+# create weather on home page
 def WeatherCreateFunction(request):
     if request.user.is_authenticated:
         city_name_list = request.POST['city'].split(" ")
@@ -43,7 +50,7 @@ def WeatherCreateFunction(request):
         return redirect('home')
     else:
         return redirect('account_login')
-
+# delete weather on home page
 def WeatherDeleteFunction(request, pk):
     if request.user.is_authenticated:
         city_name = City.objects.get(id=pk)
@@ -52,13 +59,15 @@ def WeatherDeleteFunction(request, pk):
     else:
         return redirect('account_login')
 
+# update setting on home page
 @login_required
 def SettingUpdateFunction(request):
     context = {}
     user = request.user
     instance = get_object_or_404(Setting, user=user)
-    form = SettingUpdateForm(request.POST or None, instance=instance)
-    
+
+    # App
+    form = SettingUpdateForm(request.POST or None, request.FILES or None, instance=instance)
     if request.method == "POST":
         if form.is_valid():
             update_app = form.save(commit=False)
@@ -69,10 +78,10 @@ def SettingUpdateFunction(request):
             display_dict = {}
             for tuple in display_list[1:]:
                 display_dict[tuple[0]] = tuple[1]
-            update_app.display_list = json.dumps(display_dict)
+            update_app.app_display_dict = json.dumps(display_dict)
             update_app.save()
             return redirect("home")
     context.update({
-        'form': form
+        'appupdateform': form
     })
     return render(request, 'settings.html', context)
