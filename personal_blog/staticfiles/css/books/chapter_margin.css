@@ -1,9 +1,0 @@
-.row{
-    margin-bottom: 40px;
-}
-
-@media (max-width: 768px) {
-    .row {
-        margin-right: 5px;
-    }
-}

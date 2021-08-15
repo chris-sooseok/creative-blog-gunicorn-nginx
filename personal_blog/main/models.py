@@ -26,7 +26,6 @@ class City(models.Model):
 
 # This model has multiple fields for user setting
 class Setting(models.Model):
-
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
 

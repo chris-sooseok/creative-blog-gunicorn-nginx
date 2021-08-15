@@ -201,17 +201,30 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default=None)
 AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET', default=None)
+AWS_S3_REGION_NAME = 'ap-northeast-2'
 AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}s.s3.ap-northeast-2.amazonaws.com'
+AWS_S3_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 
+# to use ckeditor through s3
+AWS_QUERYSTRING_AUTH = False
+
+# static
 AWS_LOCATION = 'static'
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+STATIC_URL = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
+#STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
 STATICFILES_STORAGE = 'config.storage_backends.StaticStorage'
+STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] 
+#STATIC_ROOT = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
+
+# media 
+AWS_MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_DOMAIN}/{AWS_MEDIA_LOCATION}/'
+MEDIA_ROOT = f'https://{AWS_S3_DOMAIN}/{AWS_MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
 
 #STATIC_URL = '/static/'
-STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] # new
 #STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
 #STATICFILES_FINDERS = [ # new
 #    "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -223,9 +236,6 @@ STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] # new
 #MEDIA_URL = '/media/'
 #MEDIA_ROOT = str(BASE_DIR.joinpath('media'))
 
-AWS_MEDIA_LOCATION = 'media'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_MEDIA_LOCATION}/'
-DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
 #PUBLIC_MEDIA_LOCATION = 'media'
 #MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
 #DEFAULT_FILE_STORAGE = 'config.storage_backends.PublicMediaStorage'
