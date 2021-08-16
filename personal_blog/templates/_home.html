@@ -31,20 +31,20 @@
             <!-- Sidebar-->
             <div class="border-end " id="sidebar-wrapper">
                 {% block nav-brand %}
-                <div class="sidebar-heading border-bottom">Creative Blog : <span style="color:orange; text-decoration: underline;"> Beta Version</span></div>
+                    <div class="sidebar-heading border-bottom">Creative Blog : <span style="color:orange; text-decoration: underline;"> Beta Version</span></div>
                 {% endblock nav-brand %}
 
                 {% block sidebar %}
                 
                 <div class="profile">
-                    <img src='' alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                    <img src='{{profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
                     {% if user.is_authenticated %}
                     <h5 style="color:white;">Chris Kim</h1>
                     <p style="color:white;">Hello, {{ user.email }}</p>
                     <p><a href="{% url 'account_logout' %}">Log Out</a></p>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'update_setting' %}">Settings</a>
                     {% else %}
-                    <p>Hello,  visitor </p>
+                    <p> Hello,  visitor </p>
                     <p><a href="{% url 'account_login' %}">Sign in</a></p>
                     {% endif %}
                     <p><button>Contact</button></p>
@@ -70,7 +70,7 @@
                             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                                 {% block nav-item %}
 
-                                <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
                            
                                 {% if app_display_dict|lookup:'todos' == "True" %}
                                     <li class="nav-item"><a class="nav-link" href="{% url 'date_list' %}">Todos</a></li>
@@ -82,6 +82,7 @@
                                 <li class="nav-item"><a class="nav-link" href="{% url 'book_list' %}">Books</a></li>
 
                                 {% endblock nav-item %}
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">

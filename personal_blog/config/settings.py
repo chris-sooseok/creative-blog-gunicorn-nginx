@@ -216,6 +216,7 @@ STATIC_URL = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
 #STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
 STATICFILES_STORAGE = 'config.storage_backends.StaticStorage'
 STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] 
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 #STATIC_ROOT = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
 
 # media 

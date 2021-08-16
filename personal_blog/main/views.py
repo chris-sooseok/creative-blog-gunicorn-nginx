@@ -35,8 +35,12 @@ def MainListFunction(request):
     cities = City.objects.all()
     
     context = {}
-    context.update({"cities": cities, "message": message})
-    
+    if request.user.is_authenticated:
+        profile_pic = Setting.objects.get(user=request.user).profile_pic
+        context.update({"cities": cities, "message": message, "profile_pic": profile_pic})
+    else:
+        context.update({"cities": cities, "message": message})
+
     return render(request, '_home.html', context)
 
 # create weather on home page
