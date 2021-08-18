@@ -27,9 +27,6 @@ services:
             - "DJANGO_SECURE_HSTS_PRELOAD=False"
             - "DJANGO_SESSION_COOKIE_SECURE=False"
             - "DJANGO_CSRF_COOKIE_SECURE=False"
-            - "AWS_ACCESS_KEY_ID=AKIAR2UYSJ3QKACKFXIO"
-            - "AWS_SECRET_ACCESS_KEY=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"
-            - "S3_BUCKET=creativeblogbucket"
     db:
         image: postgres:11
         volumes: 
