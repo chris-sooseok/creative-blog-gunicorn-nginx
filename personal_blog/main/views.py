@@ -47,20 +47,22 @@ def MainListFunction(request):
     return render(request, '_home.html', context)
 
 # create weather on home page
+@login_required
 def WeatherCreateFunction(request):
     if request.user.is_authenticated:
         city_name_list = request.POST['city'].split(" ")
         city_name_list = [word for word in city_name_list if word != ""]
         city_name = " ".join(map(str,city_name_list))
-        City(name=city_name.title()).save()
+        City(user=request.user, name=city_name.title()).save()
 
         return redirect('home')
     else:
         return redirect('account_login')
 # delete weather on home page
+@login_required
 def WeatherDeleteFunction(request, pk):
     if request.user.is_authenticated:
-        city_name = City.objects.get(id=pk)
+        city_name = City.objects.get(user=request.user, id=pk)
         city_name.delete()
         return redirect('home')
     else:
