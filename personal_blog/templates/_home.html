@@ -37,14 +37,15 @@
                 {% block sidebar %}
                 
                 <div class="profile">
-                    <img src='{{profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
                     {% if user.is_authenticated %}
-                    <h5 style="color:white;">Chris Kim</h1>
+                    <img src='{{profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                    <h5 style="color:white;">{{ user.username }}</h1>
                     <p style="color:white;">Hello, {{ user.email }}</p>
                     <p><a href="{% url 'account_logout' %}">Log Out</a></p>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'update_setting' %}">Settings</a>
                     {% else %}
-                    <p> Hello,  visitor </p>
+                    <img src="{% static 'images/default-user.png' %}"" alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                    <p style="color:white;"> Hello,  visitor </p>
                     <p><a href="{% url 'account_login' %}">Sign in</a></p>
                     {% endif %}
                     <p><button>Contact</button></p>
