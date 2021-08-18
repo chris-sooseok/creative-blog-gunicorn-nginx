@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls.base import reverse_lazy
 from django.views.generic.edit import UpdateView
@@ -11,15 +12,22 @@ import lxml
 import os
 # Create your views here.
 
-class TopicListView(ListView):
+class TopicListView(LoginRequiredMixin, ListView):
     model = Topic
     context_object_name = 'topic_list'
     template_name = '2_notes/topic_list.html'
 
-class TopicDetailView(DetailView):
+    def get_context_data(self, **kwargs):
+        context = super(TopicListView, self).get_context_data(**kwargs)
+        topic_list =  Topic.objects.filter(user=self.request.user).all()
+        context.update({'topic_list':topic_list})
+        return context
+
+class TopicDetailView(LoginRequiredMixin, DetailView):
     model = Topic
     context_object_name = 'topic'
     template_name = '2_notes/topic_detail.html'
+
 
 class TopicCreateView(LoginRequiredMixin,CreateView):
     model = Topic
@@ -28,15 +36,20 @@ class TopicCreateView(LoginRequiredMixin,CreateView):
     login_url = 'account_login'
     success_url = reverse_lazy('topic_list')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+@login_required
 def TopicDeleteFunction(request, pk):
-    topic = Topic.objects.get(id=pk)
+    topic = Topic.objects.get(user=request.user, id=pk)
     if request.method == "GET":
         return render(request, "2_notes/topic_delete.html", {"topic":topic})
     else:
         if request.user.is_authenticated:
             title = request.POST['title']
             if title == topic.topic:
-                Topic.objects.filter(id=pk).delete()
+                Topic.objects.filter(user=request.user,id=pk).delete()
                 return redirect("topic_list")
             else:
                 return render(request, "2_notes/topic_delete.html", {"topic": topic, "message": "The title didn't match"})
@@ -50,31 +63,35 @@ class TopicUpdateView(LoginRequiredMixin,UpdateView):
     template_name = "2_notes/topic_update.html"
     success_url = reverse_lazy('topic_list')
 
+@login_required
 def NoteDetailFunction(request,topic_pk,note_pk):
-    topic = Topic.objects.get(id=topic_pk)
-    note = topic.notes.get(uuid=note_pk)
+    topic = Topic.objects.get(user=request.user,id=topic_pk)
+    note = topic.notes.get(user=request.user, uuid=note_pk)
     return render(request, '2_notes/note_detail.html', {'topic':topic, 'note':note})
 
+@login_required
 def NoteCreateFunction(request, pk):
     if request.user.is_authenticated:
         if request.method == "POST":   
             form = NoteForm(request.POST)
             if form.is_valid():
                 note_item = form.save(commit=False)
+                note_item.user = request.user
                 note_item.topic_id = pk
                 note_item.save()
                 return redirect('topic_detail', pk=pk)
         
         else:
             form = NoteForm()
-            topic = Topic.objects.get(id=pk)
+            topic = Topic.objects.get(user=request.user, id=pk)
             return render(request, '2_notes/note_create.html', {'topic':topic, 'form':form})
     else:
         return redirect('account_login')
 
+@login_required
 def NoteUpdateFunction(request, topic_pk, note_pk):
     if request.user.is_authenticated:
-        topic = Topic.objects.get(id=topic_pk)
+        topic = Topic.objects.get(user=request.user, id=topic_pk)
         if request.method == "POST":
             note_item = Note.objects.get(uuid=note_pk)
             note_item.title = request.POST['title']
@@ -83,16 +100,17 @@ def NoteUpdateFunction(request, topic_pk, note_pk):
             note_item.save()
             return redirect("note_detail", topic_pk=topic_pk, note_pk=note_pk)    
         else:
-            note = Note.objects.get(uuid=note_pk)
+            note = Note.objects.get(user=request.user, uuid=note_pk)
             initial_data = {"title":note.title, "summary": note.summary, "content":note.content}
             form = NoteForm(request.POST or None,initial=initial_data)
         return render(request, "2_notes/note_update.html", {"topic":topic,"note":note, "form":form})
     else:
         return redirect('account_login')
 
+@login_required
 def NoteDeleteFunction(request, topic_pk, note_pk):
-    topic = Topic.objects.get(id=topic_pk)
-    note = Note.objects.get(uuid=note_pk)
+    topic = Topic.objects.get(user=request.user, id=topic_pk)
+    note = Note.objects.get(user=request.user, uuid=note_pk)
     if request.method == "POST":
         if request.user.is_authenticated:
             if request.POST['title'] == note.title:

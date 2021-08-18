@@ -11,6 +11,7 @@ User = get_user_model()
 class City(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=40, blank=True)
     temperature = models.CharField(max_length=40, blank=True)
     description = models.CharField(max_length=40, blank=True)
@@ -30,7 +31,7 @@ class Setting(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
 
     # profile
-    profile_pic = models.FileField(storage=ProfileMediaStorage)
+    profile_pic = ResizedImageField(upload_to='profile_pic/', size=[128,128], quality=90, blank=True, null=True)
 
     # apps
     BOOL_CHOICES= ((True, "Yes"), (False, "No"))
@@ -39,7 +40,8 @@ class Setting(models.Model):
     app_display_dict = JSONField(blank=True, null=True)
 
     # logos
-    
+
+
     def __str__(self):
         return str(self.user)
 

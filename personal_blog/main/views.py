@@ -13,33 +13,36 @@ from config import settings
 def MainListFunction(request):
     # list of recent posts
     # list of weather
-    url = "http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid=96748c1eb3fe471926e26a21bafd6c4e"
-  
-    cities = City.objects.all()
-
-    message = ""
-    if cities:
-        for city in cities:
-            r = requests.get(url.format(city.name, "metric")).json()
-        # ckeditor content
-            if "message" in r and (r["message"] == "city not found" or r["message"] == "Nothing to geocode"):
-                City.objects.get(id=city.id).delete()
-                message = "City Name is invalid"
-            else:
-                city = City.objects.get(id=city.id)
-                city.temperature = r['main']['temp']
-                city.description = r['weather'][0]['description']
-                city.icon =  r['weather'][0]['icon']
-                city.save()
-
-    cities = City.objects.all()
-    
     context = {}
     if request.user.is_authenticated:
+        url = "http://api.openweathermap.org/data/2.5/weather?q={}&units={}&appid=96748c1eb3fe471926e26a21bafd6c4e"
+
+        cities = City.objects.filter(user=request.user).all()
+
+        message = ""
+        if cities:
+            for city in cities:
+                r = requests.get(url.format(city.name, "metric")).json()
+            # ckeditor content
+                if "message" in r and (r["message"] == "city not found" or r["message"] == "Nothing to geocode"):
+                    City.objects.get(id=city.id).delete()
+                    message = "City Name is invalid"
+                else:
+                    city = City.objects.get(id=city.id)
+                    city.temperature = r['main']['temp']
+                    city.description = r['weather'][0]['description']
+                    city.icon =  r['weather'][0]['icon']
+                    city.save()
+
+        cities = City.objects.filter(user=request.user).all()
+
         profile_pic = Setting.objects.get(user=request.user).profile_pic
-        context.update({"cities": cities, "message": message, "profile_pic": profile_pic})
+        if profile_pic != None:
+            context.update({"cities": cities, "message": message, "profile_pic": profile_pic})
+        else:
+            context.update({"cities": cities, "message": message})
     else:
-        context.update({"cities": cities, "message": message})
+        pass
 
     return render(request, '_home.html', context)
 
