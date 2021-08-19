@@ -11,7 +11,6 @@ from pathlib import Path
 import socket
 from environs import Env
 
-# commit
 # environs[django] also installs 
 env = Env()
 env.read_env()
