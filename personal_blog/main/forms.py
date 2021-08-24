@@ -1,6 +1,6 @@
 from .models import City, Setting
 from django import forms
-
+from config.settings import DISPLAY_APPS
 
 unit_choceis = (("metric","Celsius"),("imperial", "Fahrenheit"))
 
@@ -15,6 +15,5 @@ class WeatherCreateForm(forms.ModelForm):
 class SettingUpdateForm(forms.ModelForm):
     class Meta:
         model = Setting
-        fields = ('profile_pic','todos', 'notes',)
-        exclude = ('user',)
-
+        exclude = ('user','app_display_dict')
+        

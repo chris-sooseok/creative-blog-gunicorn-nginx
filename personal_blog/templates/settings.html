@@ -1,5 +1,6 @@
 {% extends "_home.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}
     <title>Creative Blog: Settings</title>
@@ -9,7 +10,7 @@
 {% block item %}
     <form method="POST" action="." enctype="multipart/form-data">
         {% csrf_token %}
-            {{appupdateform}}
+            {{appupdateform|crispy}}
         <button type="submit">Update</button>
     </form>
 {% endblock item %}

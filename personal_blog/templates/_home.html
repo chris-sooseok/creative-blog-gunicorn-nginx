@@ -38,7 +38,11 @@
                 
                 <div class="profile">
                     {% if user.is_authenticated %}
-                    <img src='{{profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                    {% if setting.profile_pic %}
+                    <img src='{{setting.profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                    {% else %}
+                    <img src="{% static 'images/default-user.png' %}"" alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                    {% endif %}
                     <h5 style="color:white;">{{ user.username }}</h1>
                     <p style="color:white;">Hello, {{ user.email }}</p>
                     <p><a href="{% url 'account_logout' %}">Log Out</a></p>
@@ -73,12 +77,11 @@
 
                                 <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Main</a></li>
                            
-                                {% if app_display_dict|lookup:'todos' == "True" %}
-                                    <li class="nav-item"><a class="nav-link" href="{% url 'date_list' %}">Todos</a></li>
-                                {% endif %}
-                                {% if app_display_dict|lookup:'notes' == "True" %}
-                                    <li class="nav-item"><a class="nav-link" href="{% url 'topic_list' %}">Notes</a></li>
-                                {% endif %}
+                                {% for app in display_apps %}
+                                    {% if app_display_dict|lookup:app == True %}
+                                        <li class="nav-item"><a class="nav-link" href="{% url app %}">{{app|title}}</a></li>
+                                    {% endif %}
+                                {% endfor %}
                                 
                                 {% endblock nav-item %}
 

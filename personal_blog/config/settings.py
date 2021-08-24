@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DJANGO_DEBUG', default=True)
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
 ALLOWED_HOSTS = ['.herokuapp.com', 'localhost', '127.0.0.1']
 # change
@@ -53,17 +53,12 @@ INSTALLED_APPS = [
     'bs4',
     'lxml',
     'storages',
-
-    # local
     'accounts',
-    "main",
-    'todos',
-    'notes',
-    'people',
-    'books',
-
 ]
 
+APPS = ["main","todos", "notes", "people", "books"]
+INSTALLED_APPS = INSTALLED_APPS + APPS
+DISPLAY_APPS = ["main","todos", "notes"]
 
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (

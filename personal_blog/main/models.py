@@ -5,6 +5,8 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db.models import JSONField
 from django_resized import ResizedImageField
+import json
+from config.settings import DISPLAY_APPS
 
 User = get_user_model()
 
@@ -34,16 +36,21 @@ class Setting(models.Model):
     profile_pic = ResizedImageField(upload_to='profile_pic/', size=[128,128], quality=90, blank=True, null=True)
 
     # apps
-    BOOL_CHOICES= ((True, "Yes"), (False, "No"))
-    todos = models.BooleanField(choices=BOOL_CHOICES, default=True)
-    notes = models.BooleanField(choices=BOOL_CHOICES, default=True)
     app_display_dict = JSONField(blank=True, null=True)
 
     # logos
 
-
     def __str__(self):
         return str(self.user)
 
-    
+    def save(self, *args, **kwargs):
+        if not self.app_display_dict:
+            self.app_display_dict = json.dumps({APP:"True" for APP in DISPLAY_APPS[1:]})
+        super(Setting, self).save(*args, **kwargs)
+
+BOOL_CHOICES= ((True, "Yes"), (False, "No"))
+
+for APP in DISPLAY_APPS[1:]:
+    Setting.add_to_class(APP, models.BooleanField(choices=BOOL_CHOICES, default=True))
+
 

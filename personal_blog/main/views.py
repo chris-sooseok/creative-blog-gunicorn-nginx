@@ -5,7 +5,7 @@ from .models import City, Setting
 from django.contrib.auth.decorators import login_required
 from .forms import SettingUpdateForm
 import json
-from config import settings
+from config.settings import DISPLAY_APPS
 # Create your views here.
 
 
@@ -35,12 +35,10 @@ def MainListFunction(request):
                     city.save()
 
         cities = City.objects.filter(user=request.user).all()
-
-        profile_pic = Setting.objects.get(user=request.user).profile_pic
-        if profile_pic != None:
-            context.update({"cities": cities, "message": message, "profile_pic": profile_pic})
-        else:
-            context.update({"cities": cities, "message": message})
+        setting = Setting.objects.get(user=request.user)
+        
+           
+        context.update({"cities": cities, "message": message, "setting": setting})
     else:
         pass
 
@@ -77,16 +75,18 @@ def SettingUpdateFunction(request):
 
     # App
     form = SettingUpdateForm(request.POST or None, request.FILES or None, instance=instance)
+  
     if request.method == "POST":
         if form.is_valid():
             update_app = form.save(commit=False)
             dict = request.POST.dict()
-            display_list = []
-            for key, value in zip(dict.keys(), dict.values()):
-                display_list.append((key,value))
             display_dict = {}
-            for tuple in display_list[1:]:
-                display_dict[tuple[0]] = tuple[1]
+            for key, value in zip(dict.keys(), dict.values()):
+                if key in DISPLAY_APPS:
+                    if value == "True":
+                        display_dict[key] = True
+                    else:
+                        display_dict[key] = False
             update_app.app_display_dict = json.dumps(display_dict)
             update_app.save()
             return redirect("home")

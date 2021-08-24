@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import NoteDeleteFunction, NoteUpdateFunction, NoteCreateFunction, TopicUpdateView, TopicDeleteFunction, TopicDetailView, TopicCreateView , TopicListView, NoteDetailFunction
 urlpatterns = [
-    path('', TopicListView.as_view(), name='topic_list'),
+    path('', TopicListView.as_view(), name='notes'),
     path('create_topic/', TopicCreateView.as_view(), name="create_topic"),
     path('<uuid:pk>/delete_topic', TopicDeleteFunction, name="delete_topic"),
     path('<uuid:pk>/update_topic', TopicUpdateView.as_view(), name="update_topic"),
