@@ -21,20 +21,8 @@ body{
     border-bottom: 1px solid orange;
 }
 
-.content .content-header h1 {
-
-}
-
-.content .content-header .content-header-action  {
-    
-}
-
 .content .content-header .content-header-action a {
     text-decoration: none;
-}
-
-.content .content-header .content-header-action a:hover {
-
 }
 
 .content-body {
@@ -45,7 +33,6 @@ body{
     background-color: white;
     height: 60px;
 }
-
 
 /* Weather Styles */
 .graph {
@@ -60,10 +47,15 @@ body{
     background-color: white;
     padding-top: 10px;
 }
+
 .card-body {
     border: 2px solid #b0b3b6;
     margin-bottom: 5px;
     padding-top: 10px;
     padding-left: 10px;
     padding-bottom: 0;
+}
+
+.button {
+    float: right;
 }

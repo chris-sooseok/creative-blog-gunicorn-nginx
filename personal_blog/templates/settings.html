@@ -6,11 +6,19 @@
     <title>Creative Blog: Settings</title>
 {% endblock title %}
 
-
+{% block static %}
+    <link rel="stylesheet" href="{% static 'css/main/setting.css' %}">
+{% endblock static %}
 {% block item %}
-    <form method="POST" action="." enctype="multipart/form-data">
-        {% csrf_token %}
-            {{appupdateform|crispy}}
-        <button type="submit">Update</button>
-    </form>
+<div class="row">
+    <div class="col-md-9">
+        <div class="col-md-12 content">
+            <form method="POST" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                    {{form|crispy}}
+                    <button class="btn btn-success button"type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock item %}

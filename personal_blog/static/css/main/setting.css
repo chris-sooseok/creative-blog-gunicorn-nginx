@@ -1,0 +1,20 @@
+body{
+    background:#eee;
+    font-family: Georgia;
+}
+
+.row {
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.content {
+    border-radius: 2px;
+    background-color: white;
+    padding-top: 12px;
+    padding-bottom: 50px;
+}
+
+.button {
+    float: right;
+}

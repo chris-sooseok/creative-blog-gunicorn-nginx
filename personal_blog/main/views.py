@@ -72,7 +72,6 @@ def SettingUpdateFunction(request):
     context = {}
     user = request.user
     instance = get_object_or_404(Setting, user=user)
-
     # App
     form = SettingUpdateForm(request.POST or None, request.FILES or None, instance=instance)
   
@@ -91,6 +90,7 @@ def SettingUpdateFunction(request):
             update_app.save()
             return redirect("home")
     context.update({
-        'appupdateform': form
+        'form': form,
+        'setting': instance
     })
     return render(request, 'settings.html', context)

@@ -22,10 +22,10 @@
         <script src="{% static 'js/scripts.js' %}"></script>
         <link rel="stylesheet" href="{% static 'css/main/sidebar.css' %}"> 
         {% block static %}
-
-        <link rel="stylesheet" href="{% static 'css/main/home.css' %}">
+            <link rel="stylesheet" href="{% static 'css/main/home.css' %}">
         {% endblock static %}
     </head>
+
     <body>
         <div class="d-flex" id="wrapper">
             <!-- Sidebar-->
@@ -38,21 +38,23 @@
                 
                 <div class="profile">
                     {% if user.is_authenticated %}
-                    {% if setting.profile_pic %}
-                    <img src='{{setting.profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                        {% if setting.profile_pic %}
+                        <img src='{{setting.profile_pic.url}}' alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                        {% else %}
+                        <img src="{% static 'images/default-user.png' %}" alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                        {% endif %}
+                        <h5 style="color:white;">{{ user.username }}</h1>
+                        <p style="color:white;">Hello, {{ user.email }}</p>
+                        <p><a href="{% url 'account_logout' %}">Log Out</a></p>
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'update_setting' %}">Settings</a>
                     {% else %}
-                    <img src="{% static 'images/default-user.png' %}"" alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                        <img src="{% static 'images/default-user.png' %}" alt="John" style="width:128px; height:128px; border-radius: 50%;">
+                        <p style="color:white;"> Hello,  visitor </p>
+                        <p><a href="{% url 'account_login' %}">Sign in</a></p>
                     {% endif %}
-                    <h5 style="color:white;">{{ user.username }}</h1>
-                    <p style="color:white;">Hello, {{ user.email }}</p>
-                    <p><a href="{% url 'account_logout' %}">Log Out</a></p>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'update_setting' %}">Settings</a>
-                    {% else %}
-                    <img src="{% static 'images/default-user.png' %}"" alt="John" style="width:128px; height:128px; border-radius: 50%;">
-                    <p style="color:white;"> Hello,  visitor </p>
-                    <p><a href="{% url 'account_login' %}">Sign in</a></p>
-                    {% endif %}
+                    <!--
                     <p><button>Contact</button></p>
+                    -->
                 </div>
                
                 <div class="logos">
@@ -60,6 +62,7 @@
                     <a class="fa fa-facebook"href=""></a>
                     <a class="fa fa-instagram"href=""></a>
                 </div>
+
                 {% endblock sidebar %}
             </div>
 
