@@ -58,7 +58,7 @@ INSTALLED_APPS = [
 
 APPS = ["main","todos", "notes", "people", "books"]
 INSTALLED_APPS = INSTALLED_APPS + APPS
-DISPLAY_APPS = ["main","todos", "notes"]
+DISPLAY_APPS = ["todos", "notes"]
 
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = (

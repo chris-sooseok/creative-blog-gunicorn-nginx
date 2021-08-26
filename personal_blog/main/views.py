@@ -79,13 +79,14 @@ def SettingUpdateFunction(request):
         if form.is_valid():
             update_app = form.save(commit=False)
             dict = request.POST.dict()
+            print(dict)
             display_dict = {}
-            for key, value in zip(dict.keys(), dict.values()):
-                if key in DISPLAY_APPS:
-                    if value == "True":
-                        display_dict[key] = True
-                    else:
-                        display_dict[key] = False
+            for APP in DISPLAY_APPS:
+                if dict[APP] == "True":
+                    display_dict[APP] = True
+                else:
+                    display_dict[APP] = False
+            print(display_dict)
             update_app.app_display_dict = json.dumps(display_dict)
             update_app.save()
             return redirect("home")

@@ -9,6 +9,9 @@ urlpatterns = [
 
     # user management
     path('accounts/', include('allauth.urls')),
+
+    # main
+    path('', include('main.urls')),
     
     # third party
     path('ckeditor/', include('ckeditor_uploader.urls')),
@@ -16,10 +19,7 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 for APP in DISPLAY_APPS:
-    if APP == "main":
-        urlpatterns.append(path('', include(f'{APP}.urls')))
-    else:
-        urlpatterns.append(path(f'{APP}/', include(f'{APP}.urls')))
+    urlpatterns.append(path(f'{APP}/', include(f'{APP}.urls')))
 
 if settings.DEBUG:
     import debug_toolbar
