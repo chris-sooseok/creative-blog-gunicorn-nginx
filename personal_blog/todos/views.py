@@ -42,7 +42,7 @@ class DateCreateView(LoginRequiredMixin, CreateView):
     template_name = '1_todos/date_create.html'
     form_class = DateCreateForm
     login_url = 'account_login'
-    success_url = reverse_lazy('date_list')
+    success_url = reverse_lazy('todos')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -62,7 +62,7 @@ class DateDeleteView(LoginRequiredMixin, DeleteView):
     model = Date
     template_name = '1_todos/date_delete.html'
     login_url = 'account_login'
-    success_url = reverse_lazy('date_list')
+    success_url = reverse_lazy('todos')
 
     def get_context_data(self, **kwargs):
         context = super(DateDeleteView, self).get_context_data(**kwargs)

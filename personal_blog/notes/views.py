@@ -34,7 +34,7 @@ class TopicCreateView(LoginRequiredMixin,CreateView):
     template_name = "2_notes/topic_create.html"
     form_class = TopicCreateForm
     login_url = 'account_login'
-    success_url = reverse_lazy('topic_list')
+    success_url = reverse_lazy('notes')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -50,7 +50,7 @@ def TopicDeleteFunction(request, pk):
             title = request.POST['title']
             if title == topic.topic:
                 Topic.objects.filter(user=request.user,id=pk).delete()
-                return redirect("topic_list")
+                return redirect("notes")
             else:
                 return render(request, "2_notes/topic_delete.html", {"topic": topic, "message": "The title didn't match"})
         else:
@@ -61,7 +61,7 @@ class TopicUpdateView(LoginRequiredMixin,UpdateView):
     fields = ['topic',]
     login_url = 'account_login'
     template_name = "2_notes/topic_update.html"
-    success_url = reverse_lazy('topic_list')
+    success_url = reverse_lazy('notes')
 
 @login_required
 def NoteDetailFunction(request,topic_pk,note_pk):
