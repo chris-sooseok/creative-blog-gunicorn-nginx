@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from .models import Date, Todo
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
-from .forms import TodoUpdateForm, DateCreateForm
+from .forms import TodoUpdateForm, DateCreateForm, TodoCreateForm
 from datetime import date
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -74,28 +74,29 @@ class DateDeleteView(LoginRequiredMixin, DeleteView):
 
 @login_required
 def TodoCreateFunction(request,pk):
-    date = Date.objects.get(id=pk)
-
-    date_list = Date.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(date_list, 11)
-    page_obj = paginator.page(page)
-
-    if request.method == "GET":
-        return render(request, '1_todos/todo_create.html', {'date':date, 'page_obj':page_obj})
-    elif request.method == "POST":
-        if request.user.is_authenticated:
-            user = request.user
-            title = request.POST['title']
-            start_time = request.POST['start_time']
-            end_time = request.POST['end_time']
-            task = request.POST['task']
-            Todo(user=user,title=title,start_time=start_time,end_time=end_time,task=task,date=date).save()
-
-            return redirect('date_detail', pk=pk)
+    if request.user.is_authenticated:
+        form = TodoCreateForm(request.POST or None)
+        date = Date.objects.get(id=pk)
+        if request.method == 'POST':
+            if form.is_valid():
+                todo_item = form.save(commit=False)
+                todo_item.date = date
+                start_time = request.POST['start_time']
+                end_time = request.POST['end_time']
+                todo_item.start_time = start_time
+                todo_item.end_time = end_time
+                todo_item.user = request.user
+                todo_item.save()
+                return redirect('date_detail', pk=pk)
         else:
-            return redirect('account_login')
-
+            date_list = Date.objects.all()
+            page = request.GET.get('page', 1)
+            paginator = Paginator(date_list, 11)
+            page_obj = paginator.page(page)
+            return render(request, '1_todos/todo_create.html', {'date':date, 'page_obj':page_obj, 'form':form})
+    else:
+        return redirect('account_login')      
+    
 @login_required
 def TodoDeleteFunction(request,date_pk,todo_pk):
     if request.method == "GET":
@@ -134,8 +135,8 @@ def TodoUpdateFunction(request, date_pk, todo_pk ):
         page = request.GET.get('page', 1)
         paginator = Paginator(date_list, 11)
         page_obj = paginator.page(page)
-        date = Date.objects.get(pk=date_pk)
-        todo = Todo.objects.get(id=todo_pk)
+        date = Date.objects.get(user=request.user, pk=date_pk)
+        todo = Todo.objects.get(user=request.user, id=todo_pk)
         initial_data = {"title":todo.title, "task":todo.task}
         time = {'start_time': todo.start_time.strftime("%H:%M:%S"), 'end_time': todo.end_time.strftime("%H:%M:%S")}
         form = TodoUpdateForm(request.POST or None, initial=initial_data)

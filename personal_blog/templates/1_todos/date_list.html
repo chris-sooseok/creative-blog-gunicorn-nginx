@@ -19,9 +19,9 @@
 {% if page_obj %}
     {% for date in page_obj %}
         {% if current_date == date.date %}
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'date_detail' date.pk %}">Today {{date.date}}</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'date_detail' date.pk %}">Today {{date.date|date:'M d'}}, {{date.date|date:'l'}}</a>
         {% else %}
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'date_detail' date.pk %}">{{date.date}}</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'date_detail' date.pk %}">{{date.date|date:'M d'}}, {{date.date|date:'l'}}</a>
         {% endif %}
     {% endfor %}
      

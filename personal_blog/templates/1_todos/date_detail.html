@@ -7,7 +7,7 @@
     <div class="col-md-12 content">
       {% if date %}
               <div class="d-flex justify-content-between content-header">
-                <h1>{{ date.date }}</h1>
+                <h1>{{date.date|date:'M d'}}, {{ date.date|date:'l' }}</h1>
                 <div class="nav flex-column content-header-action">
                   <a href="{% url 'create_todo' date.pk %}" class="btn btn-success" role="button">Create new task</a>
                   <a href="{% url 'delete_date' date.pk %}" class="btn btn-success" role="button">Delete the date </a>

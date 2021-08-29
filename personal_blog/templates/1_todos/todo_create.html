@@ -1,4 +1,5 @@
 {% extends "1_todos/date_list.html" %}
+{% load crispy_forms_tags %}
 
 {% block item %}
 <div class="row">
@@ -10,15 +11,11 @@
             <div class="content-body">
                 <form method="POST" action="{% url 'create_todo' date.pk %}">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <input type="time" name="start_time" placeholder="Start Time" value="12:00" required>
-                        <input type="time" name="end_time" placeholder="End Time" value="12:00" required>
-                        <br>
-                        <br>
-                        <input class="form-control" type="text" name="title" placeholder="Title" required>  
-                        <br>
-                        <textarea class="form-control" rows="3" name="task" placeholder="Task" required></textarea>
-                    </div>
+                    
+                    <input type="time" name="start_time" placeholder="Start Time" value="12:00" required>
+                    <input type="time" name="end_time" placeholder="End Time" value="12:00" required>
+                    {{form|crispy}}    
+                    
                     <button type="submit" class="btn btn-success button">Create</button>                
                 </form>
 
