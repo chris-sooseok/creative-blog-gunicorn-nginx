@@ -44,11 +44,9 @@ class Setting(models.Model):
     def __str__(self):
         return str(self.user)
 
-    
-
     def save(self, *args, **kwargs):
         if not self.app_display_dict:
-            self.app_display_dict = json.dumps({APP:"True" for APP in DISPLAY_APPS})
+            self.app_display_dict = json.dumps({APP:True for APP in DISPLAY_APPS})
         else:
             app_display_dict = json.loads(self.app_display_dict)
             keys = list(app_display_dict)

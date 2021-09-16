@@ -17,8 +17,11 @@ class Topic(models.Model):
     class Meta:
         ordering = ['topic']
 
+
+
 class Note(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    order = models.IntegerField(blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,related_name="notes",)
     title = models.CharField(max_length=100)
@@ -28,4 +31,11 @@ class Note(models.Model):
     content = RichTextUploadingField(blank=True, null=True)
 
     def __str__(self):
-        return str(self.title)
+        return str(self.order) + '. ' + str(self.title)
+
+    def save(self, *args, **kwargs):
+        self.title = str(self.order) + '. ' + str(self.title)
+        super(Note, self).save(*args, **kwargs)
+    
+    class Meta:
+        ordering = ['order']

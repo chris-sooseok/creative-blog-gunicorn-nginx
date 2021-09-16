@@ -80,10 +80,15 @@ def NoteCreateFunction(request, pk):
                 note_item.topic_id = pk
                 note_item.save()
                 return redirect('topic_detail', pk=pk)
-        
+            else:
+                print('--------------------------')
+                print(form)
+                print('-----------not valid----------')
         else:
             form = NoteForm()
             topic = Topic.objects.get(user=request.user, id=pk)
+            num = topic.notes.count()
+            form.fields['order'].initial = num + 1
             return render(request, '2_notes/note_create.html', {'topic':topic, 'form':form})
     else:
         return redirect('account_login')
@@ -95,13 +100,14 @@ def NoteUpdateFunction(request, topic_pk, note_pk):
         if request.method == "POST":
             note_item = Note.objects.get(uuid=note_pk)
             note_item.title = request.POST['title']
+            note_item.order = request.POST['order']
             note_item.summary = request.POST['summary']
             note_item.content = request.POST['content']
             note_item.save()
             return redirect("note_detail", topic_pk=topic_pk, note_pk=note_pk)    
         else:
             note = Note.objects.get(user=request.user, uuid=note_pk)
-            initial_data = {"title":note.title, "summary": note.summary, "content":note.content}
+            initial_data = {"title":note.title,'order':note.order, "summary": note.summary, "content":note.content}
             form = NoteForm(request.POST or None,initial=initial_data)
         return render(request, "2_notes/note_update.html", {"topic":topic,"note":note, "form":form})
     else:
