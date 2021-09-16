@@ -81,9 +81,7 @@ def NoteCreateFunction(request, pk):
                 note_item.save()
                 return redirect('topic_detail', pk=pk)
             else:
-                print('--------------------------')
-                print(form)
-                print('-----------not valid----------')
+                return redirect('topic_detail', pk=pk)
         else:
             form = NoteForm()
             topic = Topic.objects.get(user=request.user, id=pk)
