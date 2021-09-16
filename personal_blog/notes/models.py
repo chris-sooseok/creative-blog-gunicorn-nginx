@@ -32,10 +32,6 @@ class Note(models.Model):
 
     def __str__(self):
         return str(self.order) + '. ' + str(self.title)
-
-    def save(self, *args, **kwargs):
-        self.title = str(self.order) + '. ' + str(self.title)
-        super(Note, self).save(*args, **kwargs)
     
     class Meta:
         ordering = ['order']
