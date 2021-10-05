@@ -9,11 +9,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import socket
-from environs import Env
+import os
 
-# environs[django] also installs 
-env = Env()
-env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DJANGO_DEBUG', default=False)
+DEBUG = os.environ.get('DJANGO_DEBUG', default=False)
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS", default="*")
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 # change
 # Application definition
 # use this text to make commit
@@ -51,7 +48,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'bs4',
-    'lxml',
     'storages',
     'accounts',
 ]
@@ -91,13 +87,13 @@ INTERNAL_IPS = [ip[:-1] + "1" for ip in ips]
 
 
 # ---- DEPLOYMENT CHECKLIST ----
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
-SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=2592000)
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
-SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
-SESSION_COOKIE_SECURE = env.bool("DJANGO_SESSION_COOKIE_SECURE", default=True)
-CSRF_COOKIE_SECURE = env.bool("DJANGO_CSRF_COOKIE_SECURE", default=True)
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", default=True)
+#SECURE_HSTS_SECONDS = os.environ.get("DJANGO_SECURE_HSTS_SECONDS", default=2592000)
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = os.environ.get("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+#SECURE_HSTS_PRELOAD = os.environ.get("DJANGO_SECURE_HSTS_PRELOAD", default=True)
+#SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SESSION_COOKIE_SECURE", default=True)
+#CSRF_COOKIE_SECURE = os.environ.get("DJANGO_CSRF_COOKIE_SECURE", default=True)
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # ---- DEPLOYMENT CHECKLIST END -----
 
 
@@ -147,8 +143,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': env.dj_db_url("DATABASE_URL",
-    default="postgres://postgres@db/postgres") 
+    "default": {
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
+    }
 }
 
 
@@ -192,33 +194,37 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # ---- S3 SETTING -----
-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID", default=None)
-AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY", default=None)
-AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET', default=None)
-AWS_S3_REGION_NAME = 'ap-northeast-2'
-AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
-AWS_S3_SIGNATURE_VERSION = 's3v4'
+USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
-# to use ckeditor through s3
-AWS_QUERYSTRING_AUTH = False
+if USE_S3 == True:
+    # aws settings
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    S3_BUCKET = os.getenv('S3_BUCKET')
+    AWS_LOCATION = "ap-northeast-2"
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_DOMAIN = '%s.s3.amazonaws.com' % S3_BUCKET
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    # to use ckeditor through s3
+    AWS_QUERYSTRING_AUTH = False
+    # s3 static settings
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_DOMAIN}/{STATIC_LOCATION}/'
+    STATICFILES_STORAGE = 'config.storage_backends.StaticStorage'
+    ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+    # s3 public media settings
+    AWS_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://{AWS_S3_DOMAIN}/{AWS_MEDIA_LOCATION}/'
+    MEDIA_ROOT = f'https://{AWS_S3_DOMAIN}/{AWS_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    MEDIA_URL = '/mediafiles/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-# static
-AWS_LOCATION = 'static'
-STATIC_URL = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
-#STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
-STATICFILES_STORAGE = 'config.storage_backends.StaticStorage'
-STATICFILES_DIRS = [str(BASE_DIR.joinpath('static'))] 
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-#STATIC_ROOT = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
-
-# media 
-AWS_MEDIA_LOCATION = 'media'
-MEDIA_URL = f'https://{AWS_S3_DOMAIN}/{AWS_MEDIA_LOCATION}/'
-MEDIA_ROOT = f'https://{AWS_S3_DOMAIN}/{AWS_MEDIA_LOCATION}/'
-DEFAULT_FILE_STORAGE = 'config.storage_backends.MediaStorage'
-
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 #STATIC_URL = '/static/'
 #STATIC_ROOT = str(BASE_DIR.joinpath('staticfiles')) # new
 #STATICFILES_FINDERS = [ # new

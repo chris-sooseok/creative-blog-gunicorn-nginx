@@ -1,0 +1,8 @@
+docker-compose-prod.yml
+__pychahe__/
+db.sqlite3
+progress.txt
+docker-compose.prod.yml
+docker-compose-staging.yml
+.env.dev
+.env.prod

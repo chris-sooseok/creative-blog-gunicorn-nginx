@@ -1,6 +1,5 @@
 from .models import City, Setting
 from django import forms
-from config.settings import DISPLAY_APPS
 
 unit_choceis = (("metric","Celsius"),("imperial", "Fahrenheit"))
 

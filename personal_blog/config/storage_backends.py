@@ -1,11 +1,9 @@
 from storages.backends.s3boto3 import S3Boto3Storage
-from config import settings
+
 
 class StaticStorage(S3Boto3Storage):
-    location = settings.AWS_LOCATION
+    location = 'ap-northeast-2'
     default_acl = 'public-read'
-
-
 # profile picture upload 
 class ProfileMediaStorage(S3Boto3Storage):
     location = 'media/profile_pic'
@@ -19,7 +17,6 @@ class ProfileMediaStorage(S3Boto3Storage):
 #    default_acl = 'private'
 #    file_overwrite = False
 #    custom_domain = False
-
 class MediaStorage(S3Boto3Storage):
     location = 'media'
     default_acl = 'public-read'

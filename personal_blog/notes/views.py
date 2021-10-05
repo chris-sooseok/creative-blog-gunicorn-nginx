@@ -7,9 +7,7 @@ from .models import Topic, Note
 from .forms import NoteForm, TopicCreateForm
 from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from bs4 import BeautifulSoup
-import lxml
-import os
+
 # Create your views here.
 
 class TopicListView(LoginRequiredMixin, ListView):
